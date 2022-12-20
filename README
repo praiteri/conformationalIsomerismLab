@@ -1,0 +1,52 @@
+This repository contains the input files for the computational work described in:
+"Revisiting the conformational isomerism of di-haloethanes; a hybrid computational and experimental laboratory for the undergraduate curriculum"
+published in ACS Physical Chemistry AU 
+
+SOFTWARE REQUIREMENTS
+All the QM calculations have been performed with ORCA 5.0.2
+All the MD simulations have been performed with LAMMPS and the input files were tested 
+with the "release" version downloaded from github on 23rd November 2022.
+LAMMPS must be compiled with these extra packages:
+  * KSPACE
+  * MOLECULE
+  * EXTRA-FIX
+  * EXTRA-DUMP
+  * EXTRA-MOLECULE
+
+PROVIDED FILES
+The folder "docs" contains the instructions to the students, which include
+  * Introduction to the problem
+  * Short introduction to the computational methods
+  * Detailed instructions for running the calculations on a LINUX VM
+  * Instructions to run the experiments using the micro-RAMAN scanning probe
+  * Details about the assessment
+
+The folder "geometries" contains the atomic coordinates for the DFT and Molecualr Dynamics calculations
+  * ORCA
+    + DBE relaxed geometries of the anti conformer -> dbe_anti.xyz
+    + DBE relaxed geometries of the gauche conformer -> dbe_gauche.xyz
+    + DBE relaxed geometries of the transition state -> dbe_ts.xyz
+    + DCE relaxed geometries of the anti conformer -> dce_anti.xyz
+    + DCE relaxed geometries of the gauche conformer -> dce_gauche.xyz
+    + DCE relaxed geometries of the transition state -> dce_ts.xyz
+  * LAMMPS
+    + DBE - coordinates of liquid in PDB format -> dbe_liquid.pdb
+    + DBE - coordinates of liquid in LAMMPS format -> dbe_liquid.lmp
+    + DBE - coordinates of isolated molecule in PDB format -> dbe_gas.pdb
+    + DBE - coordinates of isolated molecule in LAMMPS format -> dbe_gas.lmp
+    + DCE - coordinates of liquid in PDB format -> dce_liquid.pdb
+    + DCE - coordinates of liquid in LAMMPS format -> dce_liquid.lmp
+    + DCE - coordinates of isolated molecule in PDB format -> dce_gas.pdb
+    + DCE - coordinates of isolated molecule in LAMMPS format -> dce_gas.lmp
+
+The folder "inputFiles" contains the input files for ORCA and LAMMPS
+  * ORCA input file for the geometry optimisation and frequency calculation -> orca.geopt.inp
+  * ORCA input file for the Nudged Elastic Band calculation (transition state) -> orca.neb.inp
+  * LAMMPS input file that contains the instructions for the MD calculations -> lammps.inp
+  * Forcefield file for the DCE/DBE interactions in LAMMPS format -> forcefield.lmp
+
+The folder "MDAnalysis" contain
+  * python script to compute the distribution of the torsional angle 
+    - the following python packages are required: MDAnalysis, matplotlib and numpy
+  * example of input and output files
+

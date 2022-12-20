@@ -1,0 +1,40 @@
+# Level of theory - method & basis set
+# ! RI BP86 def2-TZVP def2/J
+# ! B3LYP def2-TZVP
+# ! B3LYP RIJCOSX def2-TZVP def2/J
+# ! wB97X def2-TZVP def2/J RIJCOSX
+! B3LYP D3BJ def2-TZVP
+# ! RIJK RI-B2PLYP D3BJ def2-TZVP def2/JK def2-TZVP/C
+# ! RIJCOSX RI-B2PLYP D3BJ def2-TZVP def2/J def2-TZVP/C
+# ! RIJK RI-PWPB95 D3BJ def2-TZVP def2/JK def2-TZVP/C
+# ! RI-MP2 RIJCOSX aug-cc-pVTZ aug-cc-pVTZ/C def2/J
+# ! SCS-MP3 cc-pVTZ
+# ! DLPNO-MP2 DEF2-QZVPP DEF2-QZVPP/C
+# ! DLPNO-CCSD DEF2-QZVPP DEF2-QZVPP/C
+# ! DLPNO-CCSD(T) EXTRAPOLATE(3) cc-pVQZ/C
+
+# Tight convergence for the SCF
+! TightSCF
+
+# Perform a geometry optimisation
+! TightOpt
+
+# Perform a frequency calculation to:
+#  1. check that the final geometry is a minimum
+#  2. compute the free energy using the quasi harmonic approximantion
+#  3. select the temperature(s) for the free energy calculation
+! Freq
+%freq  Temp  290, 295, 300
+end
+
+# Implicit solvent - if commented vaccum is assumed
+#! CPCM
+#%cpcm
+#  smd true
+#  SMDsolvent "1,2-DICHLOROETHANE"
+#  SMDsolvent "1,2-DIBROMOETHANE"
+#end
+
+# Charge, multiplicity and input geometry   
+* xyzfile 0 1 coord.xyz
+

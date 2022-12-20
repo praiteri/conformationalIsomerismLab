@@ -1,0 +1,113 @@
+##############################################################################################
+#### Atoms types - mass - charge
+##############################################################################################
+#@ 6 atom types
+
+variable Cc   equal  1
+variable Hc   equal  2
+variable Cl   equal  3
+variable Cb   equal  4
+variable Hb   equal  5
+variable Br   equal  6
+ 
+##############################################################################################
+#### Atom masses
+##############################################################################################
+
+mass ${Cc}     12.010
+mass ${Hc}      1.008
+mass ${Cl}     35.450
+mass ${Cb}     12.010
+mass ${Hb}      1.008
+mass ${Br}     79.9
+ 
+##############################################################################################
+#### Atom charges not set in lammps input
+##############################################################################################
+ 
+set type ${Cc}    charge    -0.05810
+set type ${Hc}    charge     0.13110
+set type ${Cl}    charge    -0.20410
+
+set type ${Cb}    charge    -0.20750
+set type ${Hb}    charge     0.17710
+set type ${Br}    charge    -0.14660
+
+##############################################################################################
+#### Covalent bond parameters
+##############################################################################################
+#@ 6 bond types
+
+bond_style harmonic
+#@ Cc - Cc
+bond_coeff    1     13.14374   1.5350
+#@ Cc - Hc
+bond_coeff    2     14.56610   1.0930
+#@ Cc - Cl
+bond_coeff    3     12.09866   1.7860
+#@ Cb - Cb
+bond_coeff    4     13.14374   1.5350
+#@ Cb - Hb
+bond_coeff    5     14.56610   1.0930
+#@ Cb - Br
+bond_coeff    6      9.95232   1.9660
+
+##############################################################################################
+#### Covalent angle parameters
+##############################################################################################
+#@ 8 angle types
+ 
+angle_style harmonic
+#@ Cc - Cc - Hc
+angle_coeff     1      2.01037 110.0700
+#@ Cc - Cc - Cl
+angle_coeff     2      2.50863 110.3300
+#@ Hc - Cc - Hc
+angle_coeff     3      1.69902 109.5500
+#@ Cl - Cc - Hc
+angle_coeff     4      1.76320 105.9300
+#@ Cb - Cb - Hb
+angle_coeff     5      2.01037 110.0700
+#@ Cb - Cb - Br
+angle_coeff     6      2.73330 109.25
+#@ Hb - Cb - Hb
+angle_coeff     7      1.69902 109.55
+#@ Br - Cb - Hb
+angle_coeff     8      1.86522 103.04
+
+##############################################################################################
+#### Covalent dihedrals parameters
+##############################################################################################
+#@ 6 dihedral types
+
+dihedral_style fourier
+#@ Hc - Cc - Cc - Hc
+dihedral_coeff    1   1  0.00675  3   0
+#@ Cl - Cc - Cc - Hc
+dihedral_coeff    2   1  0.01084  1   0
+#@ Cl - Cc - Cc -Cl
+dihedral_coeff    3   1  0.003    1 180.0
+#@ Hb - Cb - Cb - Hb
+dihedral_coeff    4   1  0.00675  3   0
+#@ Br - Cb - Cb - Hb
+dihedral_coeff    5   1  0.02385  1   0
+#@ Br - Cb - Cb -Br
+dihedral_coeff    6   1  0.04     1   0.0
+
+##############################################################################################
+# Pair potentials
+##############################################################################################
+ 
+variable rcut equal 11.
+
+pair_style lj/cut/coul/cut ${rcut}
+pair_coeff     ${Cc}     ${Cc}     0.00474    3.39967
+pair_coeff     ${Hc}     ${Hc}     0.00068    2.47135
+pair_coeff     ${Cl}     ${Cl}     0.01149    3.47094
+pair_coeff     ${Cb}     ${Cb}     0.00474    3.39967
+pair_coeff     ${Hb}     ${Hb}     0.00068    2.47135
+pair_coeff     ${Br}     ${Br}     0.01821    3.59923
+
+pair_modify tail no mix arithmetic
+
+special_bonds amber

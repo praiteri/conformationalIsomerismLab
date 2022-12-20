@@ -1,0 +1,86 @@
+# ------ Units -------------------------------------
+units metal                                           # eV, ps, Angstrom, bar
+
+# ------ Simulation files --------------------------
+variable ff_file        index         forcefield.lmp   # force field file
+variable coord_file     index        coordinates.lmp   # coordinates file
+variable traj_file      index         trajectory.dcd   # trajectory file - no extension
+
+# ------ Simulation type ---------------------------
+variable minimisation   index                   no    # energy minimisation
+variable md             index                  yes    # molecular dynamics
+
+# ------ Molecular dynamics variables --------------
+variable ens            index                  nvt    # ensemble (nve, nph, nvt, npt)
+variable timestep       index                0.001    # simulation timestep (time units)
+variable nsteps         index              5000000    # number of MD steps
+
+# ------ Thermostat --------------------------------
+variable temp           index                 298.   # starting temperature (K)
+variable trel           index                  0.1    # thermostat relaxation time (time units)
+
+# ------ Barostat (NPT runs only) ------------------
+variable pres           index                    1.   # pressure bar/atm
+variable prel           index                    1.   # barostat relaxation time (time units)
+
+# ------ Output ------------------------------------
+variable nthermo        index                 1000    # thermodynamic data output frequency
+variable ntraj          index                 1000    # trajectory output frequency - all system
+
+# ------ Random number seeds -----------------------
+variable iseed0         index                32478    # Random seed for initial velocities
+variable iseed1         index                21583    # Ramdom seed for the stochastic thermostats
+
+# ------ Atom Style --------------------------------
+atom_style full
+
+# ------ Period Boundary Conditions ----------------
+boundary p p p                                        # 3D Periodic Boundary Conditions
+
+# ------ Read Coordinates and Topology -------------
+read_data ${coord_file}                               # Charges, coordinates and topology are defined here
+
+# ------ Read Force Field --------------------------
+include ${ff_file}
+
+# ------ Energy minimisation -----------------------
+if "${minimisation} == no" then "jump SELF end_minimise"
+  print "Doing CG minimisation"
+  variable etol           index             1e-6     # energy change threshold
+  variable ftol           index             1e-6     # force change threshold
+  variable maxiter        index              100     # max number of iterations
+  min_style cg
+  min_modify line quadratic
+  minimize ${etol} ${ftol} ${maxiter} ${maxiter}
+  reset_timestep 0
+label end_minimise
+
+# ------ Ensemble ----------------------------------
+# nve/nph
+if "${ens} == nve" then "fix md all nve"
+if "${ens} == nvt" then "fix md all nve"
+if "${ens} == npt" then "fix md all nph iso ${pres} ${pres} ${prel} tchain 5 pchain 5 mtk yes"
+if "${ens} != nve" then "fix tst all temp/csvr ${temp} ${temp} ${trel} ${iseed1}"
+
+# ------ Thermodynamic output ----------------------
+variable str_basic string 'step time pe temp press'
+if "${ens} == nve" then "variable str_ens string 'etotal'"
+if "${ens} == nvt" then "variable str_ens string ''"
+if "${ens} == npt" then "variable str_ens string 'vol density'"
+thermo_style custom ${str_basic} ${str_ens} cpu cpuremain
+thermo ${nthermo}
+thermo_modify flush yes
+
+# ------ Time step ---------------------------------
+timestep ${timestep}
+
+# ------ Initial velocities and COM motion ---------
+velocity all create ${temp} ${iseed0} mom yes dist gaussian
+fix com all momentum 100 linear 1 1 1
+
+# ------ Trajectory output -------------------------
+dump traj all dcd ${ntraj} ${traj_file}
+dump_modify traj unwrap yes
+
+# ------ Molecular Dynamics ------------------------
+run ${nsteps}

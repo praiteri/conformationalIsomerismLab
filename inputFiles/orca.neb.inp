@@ -1,0 +1,18 @@
+# Level of theory - method & basis set
+! B3LYP D3BJ def2-TZVP
+
+# Tight convergence for the SCF
+! TightSCF
+
+# # Charge, multiplicity and input geometry of the reactant
+* xyzfile 0 1 anti.xyz
+
+# Nudged Elastic Band calculation
+! NEB-TS
+
+# Input geometry of the product and number of intermediate images
+%neb
+  NEB_End_XYZFile "gauche.xyz"
+  Nimages 7
+end
+

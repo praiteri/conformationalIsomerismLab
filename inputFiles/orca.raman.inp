@@ -1,0 +1,23 @@
+# Level of theory - method & basis set
+! B3LYP D3BJ def2-TZVP
+
+# Tight convergence for the SCF
+! TightSCF
+
+# Raman spectrum
+! NumFreq NearIR defgrid3
+%elprop
+  Polar 1
+end
+
+# Implicit solvent - if commented vaccum is assumed
+#! CPCM
+#%cpcm
+#  smd true
+#  SMDsolvent "1,2-DICHLOROETHANE"
+#  SMDsolvent "1,2-DIBROMOETHANE"
+#end
+
+# Charge, multiplicity and input geometry   
+* xyzfile 0 1 coord.xyz
+
